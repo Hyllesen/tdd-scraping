@@ -1,17 +1,15 @@
 const request = require("request-promise");
-const fs = require("fs");
-
-const html = fs.readFileSync("./__tests__/musicians.html");
+const parser = require("./parser");
 
 async function getHtmlFromUrl(url) {
   const html = await request.get(url);
   return html;
 }
 
-function writeHtmlToPath(path, html) {
-  fs.writeFileSync(path, html);
+async function main(url) {
+  const html = await getHtmlFromUrl(url);
+  const listings = await parser.getListings(html);
+  console.log(listings);
 }
 
-console.log(html.toString());
-
-//getHtmlFromUrl("https://sfbay.craigslist.org/search/muc");
+main("https://sfbay.craigslist.org/d/musicians/search/muc");
